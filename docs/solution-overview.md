@@ -1,41 +1,9 @@
-# Solution Overview
+# Solution overview
 
-## What We Built
+GridWatch separates evidence according to what the data can support. ETT provides measured oil temperatures and loads, so its model predicts temperature at t+24 hours. A reproducible simulator provides sensor snapshots, forecast-like weather inputs, prior incident counts and a stochastic next-day event label for the outage classifier.
 
-[Describe your solution in plain language. Avoid jargon — write as if explaining to a smart colleague unfamiliar with your tech stack.]
+The operator edits wind, rain and crew availability. The engine scores twelve fictional assets, ranks risk multiplied by effective customer exposure plus 5,000 equivalent customers per critical site, and proposes inspection jobs. Backup fractions reduce customer exposure. This impact formula is a configurable design assumption, not an industry standard.
 
-## How It Works
+Crews alternate electrical and line specialisms. The planner walks the priority queue and assigns a matching crew with enough hours in an eight-hour shift. It includes one hour of travel per job and explicitly reports unassigned work. Each crew stages in its first job's area.
 
-[Explain the core mechanism step by step. A numbered list or simple flow works well here.]
-
-1. [Step 1: e.g., "User connects their GitHub repository via OAuth"]
-2. [Step 2: e.g., "The system ingests pipeline logs and feeds them to watsonx.ai"]
-3. [Step 3: e.g., "An anomaly score is computed and displayed on the dashboard"]
-4. [Step 4: e.g., "Alerts are sent to Slack when the score exceeds a threshold"]
-
-## Architecture Diagram
-
-> See [`architecture.md`](architecture.md) for the detailed diagram.
-
-[Optionally include a simple ASCII or Mermaid diagram here for quick reference.]
-
-```
-[User] → [Frontend: React] → [API: FastAPI] → [watsonx.ai] → [Dashboard]
-                                    ↓
-                             [PostgreSQL DB]
-```
-
-## Key Design Decisions
-
-| Decision | Rationale |
-|---|---|
-| [e.g., Used watsonx.ai for anomaly detection] | [e.g., Pre-trained models reduced time-to-value vs. building from scratch] |
-| [Decision 2] | [Rationale 2] |
-| [Decision 3] | [Rationale 3] |
-
-## IBM Technologies Used
-
-[Explain specifically HOW you used each IBM technology — not just that you used it.]
-
-- **[IBM Tech 1, e.g., watsonx.ai]:** [How it was used — e.g., "Used the `ibm/granite-13b-instruct-v2` model via the Python SDK to classify anomaly types from log text."]
-- **[IBM Tech 2]:** [How it was used]
+Feature evidence replaces one value with its training median and measures the change in probability. This sensitivity is not causal attribution and can behave unreliably with correlated inputs. Bob uses the same engine through MCP to explain results, with no separate invented risk values.

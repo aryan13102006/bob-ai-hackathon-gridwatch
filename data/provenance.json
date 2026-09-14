@@ -1,0 +1,12 @@
+{
+  "ETT-small/ETTh1.csv": {
+    "url": "https://raw.githubusercontent.com/zhouhaoyi/ETDataset/main/ETT-small/ETTh1.csv",
+    "sha256": "f18de3ad269cef59bb07b5438d79bb3042d3be49bdeecf01c1cd6d29695ee066",
+    "bytes": 2589657
+  },
+  "LICENSE": {
+    "url": "https://raw.githubusercontent.com/zhouhaoyi/ETDataset/main/LICENSE",
+    "sha256": "83cbb5c31415b1d0ee1d20d35dae3fda3a045b85fae9364cc57facc9cd6e0946",
+    "bytes": 17818
+  }
+}

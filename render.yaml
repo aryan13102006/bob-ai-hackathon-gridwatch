@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: gridwatch-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r src/requirements-render.txt && python src/download_data.py && python src/train.py
+    startCommand: gunicorn --chdir src wsgi:application --bind 0.0.0.0:$PORT --workers 1 --threads 2 --timeout 120 --access-logfile -
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: OPENBLAS_NUM_THREADS
+        value: '1'
+      - key: OMP_NUM_THREADS
+        value: '1'

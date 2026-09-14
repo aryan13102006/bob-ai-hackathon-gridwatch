@@ -1,121 +1,54 @@
-# 🚀 [Your Project Title Here]
+# GridWatch
 
-> ⚠️ **Replace everything in `[ ]` brackets with your actual content before submission.**
+U1: Power Outage Prediction & Grid Equipment Failure Advisor.
 
----
+GridWatch is a working local prototype for utility operators. It combines a trained synthetic failure model with weather scenarios, asset impact ranking and crew planning. A separate model forecasts real ETT transformer oil temperature 24 hours ahead.
 
-## 👥 Team
+## Run
 
-| Field | Value |
-|---|---|
-| **Team Name** | [Your Team Name] |
-| **Track** | [AI / DevOps / Sustainability / Open] |
-| **Team Lead** | [Name] — [email@ibm.com] |
-| **Members** | [Name 1], [Name 2], [Name 3] |
+Python 3.12 is recommended. From this repository:
 
----
-
-## 🎯 Problem Statement
-
-> In 2–3 sentences: What problem does your project solve? Who experiences this problem?
-
-[Describe the real-world problem your project addresses. Be specific about who the user is and what pain point they face.]
-
----
-
-## 💡 Solution
-
-> In 2–3 sentences: What did you build? How does it solve the problem above?
-
-[Describe your solution clearly. Explain the core mechanism — what makes it work.]
-
----
-
-## ✨ Key Features
-
-- **Feature 1:** [Brief description — e.g., "Real-time anomaly detection using watsonx.ai"]
-- **Feature 2:** [Brief description]
-- **Feature 3:** [Brief description]
-- **Feature 4:** [Optional]
-- **Feature 5:** [Optional]
-
----
-
-## 🛠️ Tech Stack
-
-| Category | Technologies |
-|---|---|
-| **Languages** | [e.g., Python, TypeScript] |
-| **Frameworks** | [e.g., FastAPI, React] |
-| **IBM Technologies** | [e.g., watsonx.ai, IBM Bob, IBM Cloud] |
-| **Databases** | [e.g., PostgreSQL, Redis] |
-| **Other** | [e.g., Docker, GitHub Actions] |
-
----
-
-## 📁 Repository Structure
-
-```
-├── src/                  # All source code
-├── docs/                 # Written documentation
-│   ├── problem-statement.md
-│   ├── solution-overview.md
-│   ├── architecture.md
-│   └── setup-guide.md
-├── demo/                 # Demo artifacts
-│   ├── screenshots/      # App screenshots
-│   └── demo-video-link.txt  # Link to demo video
-├── presentation/         # Slide deck
-└── submission.yaml       # Structured submission metadata
+```sh
+python -m venv .venv
+# Windows: .venv\Scripts\activate
+# macOS/Linux: source .venv/bin/activate
+pip install -r src/requirements.txt
+python src/download_data.py
+python src/train.py
+python src/test_system.py
+python src/server.py
 ```
 
----
+Open http://127.0.0.1:8765. Full instructions: [setup guide](docs/setup-guide.md).
 
-## ⚡ How to Run
+## Implemented features
 
-> **Copy these exact steps from your [`docs/setup-guide.md`](docs/setup-guide.md)**
+- Real ETTh1 24-hour temperature forecasting with temporal holdout, validation-only model selection and persistence comparison.
+- Synthetic 24-hour failure probabilities from sensors, scenario weather and past incidents, compared with a threshold baseline.
+- Interactive asset schematic, equipment evidence and area exposure estimates.
+- Skill- and capacity-constrained maintenance queue, crew staging and JSON export.
+- IBM Bob MCP tools that call the same prediction and planning engine.
 
-```bash
-# 1. Clone the repo
-git clone https://github.com/[your-repo].git
-cd [your-repo]
+## Team
 
-# 2. Install dependencies
-[your install command here]
+Team: **GridWatch** (provisional name). Track: **AI**. Lead: **Aryan Chanpa** (`aryanchanpa13@gmail.com`, the selected account). Additional team members have not been supplied.
 
-# 3. Configure environment
-cp .env.example .env
-# Edit .env with your values
+## Stack
 
-# 4. Run the project
-[your run command here]
-```
+Python, pandas, NumPy, scikit-learn, MCP Python SDK, WSGI/Gunicorn, HTML/CSS/JavaScript. Deployment targets Vercel for the frontend and Render for the API. IBM Bob connects through a local MCP server. No watsonx integration is claimed.
 
----
+## Evidence and limitations
 
-## 🖥️ Demo
+See [model card](docs/model-card.md) and the exact machine-readable results in models/metrics.json. The ETT dataset has no outage labels. The failure model and fictional network use simulated data; their metrics do not establish real-world outage reliability. Simulated event prevalence is deliberately high for a visible demonstration. Temperature forecasting and failure prediction are separate models, not a validated fused predictor. Weather is an editable scenario, not a live feed. The planning heuristic does not run power flow, optimize routes or dispatch crews.
 
-| Artifact | Link |
-|---|---|
-| 📹 Demo Video | [See demo/demo-video-link.txt](demo/demo-video-link.txt) |
-| 🌐 Live Demo | [See demo/live-demo-url.txt](demo/live-demo-url.txt) |
-| 🖼️ Screenshots | [See demo/screenshots/](demo/screenshots/) |
-| 📊 Presentation | [See presentation/slides.pdf](presentation/) |
+## Demo
 
----
+Run locally, follow the [demo script](demo/demo-script.md), and inspect [screenshots](demo/screenshots/) and the [presentation](presentation/slides.pptx). [Live demo status](demo/live-demo-url.txt) and [video status](demo/demo-video-link.txt) are tracked separately; neither is considered complete until the corresponding URL is verified.
 
-## ⚠️ Known Limitations
+## Deployment
 
-> Be honest — judges appreciate transparency over overclaiming.
+Vercel and Render configuration is included. See [deployment guide](docs/deployment.md) for the exact settings and [submission status](docs/submission-status.md) for outstanding account and submission steps. The original organizer validator is preserved; a separate Backend tests workflow verifies model training and serving on a clean runner.
 
-- [Limitation 1: e.g., "Authentication is mocked — not production-ready"]
-- [Limitation 2: e.g., "Only tested on Chrome"]
-- [Limitation 3: e.g., "Feature X is scaffolded but not fully implemented"]
+## What we are most proud of
 
----
-
-## 🏅 What We're Most Proud Of
-
-[Tell the judges what part of your submission is strongest and worth paying close attention to.]
-
----
+The application exposes measured baseline comparisons, temporal boundaries, uncertain evidence and unassigned jobs. Its useful output is an inspectable plan rather than unsupported claims of prevented blackouts.

@@ -1,47 +1,5 @@
-# Source Code
+# Source layout
 
-Place all your project's source code in this folder.
+download_data.py fetches original data and template metadata. train.py trains both benchmarks. engine.py supplies scenario analysis and planning. server.py serves web/. mcp_server.py exposes the same engine to Bob. configure_bob.py writes machine-local configuration. test_system.py and test_mcp.py verify behaviour and the MCP protocol.
 
-## Structure Guidelines
-
-Organize your code logically. Here are common patterns — use whatever fits
-your project:
-
-### Web Application
-```
-src/
-  backend/        ← API server code
-  frontend/       ← UI code
-  shared/         ← Shared utilities/types
-```
-
-### Data / AI Project
-```
-src/
-  data/           ← Data ingestion / preprocessing
-  models/         ← ML model code
-  api/            ← Serving layer
-  notebooks/      ← Jupyter notebooks (exploration)
-```
-
-### CLI / Script-based Tool
-```
-src/
-  cli/            ← CLI entry points
-  lib/            ← Core logic
-  utils/          ← Helpers
-```
-
-## Important Files to Include
-
-- `requirements.txt` or `package.json` — dependency manifest
-- `.env.example` — template for environment variables (NEVER commit `.env`)
-- Any database migration files
-- Configuration files
-
-## What NOT to Include in src/
-
-- `.env` files with real secrets
-- Large binary files (use Git LFS or link externally)
-- `node_modules/` or `venv/` (these are in `.gitignore`)
-- Build artifacts (`dist/`, `build/`, `__pycache__/`)
+`wsgi.py` is the read-only Render deployment adapter, served by Gunicorn. `test_wsgi.py` checks this adapter against the trained model. `build_frontend.mjs` copies `web/` into a Vercel Build Output deployment with an API proxy configured by `GRIDWATCH_API_URL`. `requirements-core.txt` pins model dependencies; `requirements.txt` adds local MCP support; `requirements-render.txt` adds Gunicorn. See `docs/deployment.md`.

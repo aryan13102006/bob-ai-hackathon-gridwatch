@@ -1,0 +1,9 @@
+{
+  "name": "gridwatch-u1",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "node src/build_frontend.mjs",
+    "dev": "python src/server.py"
+  }
+}

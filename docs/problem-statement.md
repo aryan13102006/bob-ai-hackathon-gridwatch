@@ -1,21 +1,7 @@
-# Problem Statement
+# U1 problem
 
-## Background
+Utility maintenance and control-room teams need to decide which transformer or substation deserves attention before an outage. Sensor abnormalities alone are insufficient: weather can increase exposure, and the consequences differ by customer group and backup coverage.
 
-[Describe the broader context. What domain or industry does this problem belong to? What situation creates the problem?]
+The supplied Industry Problem Statements - 2026 document asks for sensor, weather and incident fusion, outage-prone area identification, impact ranking and maintenance/crew pre-positioning. GridWatch implements a demonstration of this workflow. It does not claim measured utility savings.
 
-## The Problem
-
-[State the problem clearly and specifically. Avoid vague statements like "things are slow" — instead say "Operations teams spend an average of 45 minutes per incident diagnosing pipeline failures because logs are scattered across 6 different tools."]
-
-## Who is Affected
-
-[Describe the specific user or persona experiencing this problem. Be concrete — not "developers" but "backend engineers managing CI/CD pipelines in enterprises with 50+ microservices."]
-
-## Why It Matters
-
-[What is the cost of this problem? Lost time? Revenue? Safety risk? Frustration? Quantify if possible.]
-
-## Why Existing Solutions Fall Short
-
-[Briefly explain what people currently do and why it doesn't fully solve the problem. This sets up why your solution is needed.]
+Success for this prototype means reproducible model evaluation, inspectable risk drivers and feasible crew assignments. Field success requires actual timestamped failures and prospective evaluation.

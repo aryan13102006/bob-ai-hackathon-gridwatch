@@ -1,79 +1,60 @@
-# Setup Guide
-
-> **This file is read by the automated evaluation pipeline. Be precise and complete.**
+# Setup guide
 
 ## Prerequisites
 
-Before you begin, ensure you have the following installed:
+Python 3.12, network access for package installation and the public ETT download, and a modern browser. IBM Bob is optional for the dashboard but required to demonstrate its MCP workflow. No API keys are used.
 
-- [ ] [e.g., Python 3.11+]
-- [ ] [e.g., Node.js 18+]
-- [ ] [e.g., Docker Desktop]
-- [ ] [e.g., An IBM Cloud account with watsonx.ai access]
+## Fresh installation
 
-## Environment Variables
+Run all commands from the repository root:
 
-Copy `.env.example` to `.env` and fill in the values:
-
-```bash
-cp .env.example .env
+```sh
+python -m venv .venv
 ```
 
-| Variable | Description | Required |
-|---|---|---|
-| `WATSONX_API_KEY` | Your IBM watsonx.ai API key | Yes |
-| `WATSONX_PROJECT_ID` | Your watsonx.ai project ID | Yes |
-| `DATABASE_URL` | PostgreSQL connection string | Yes |
-| `SLACK_WEBHOOK_URL` | Slack webhook for alerts | No |
+Activate `.venv\Scripts\activate` on Windows, or `source .venv/bin/activate` on macOS/Linux. Then:
 
-## Installation
-
-```bash
-# 1. Clone the repository
-git clone https://github.com/[your-org]/[your-repo].git
-cd [your-repo]
-
-# 2. Install backend dependencies
-[your command — e.g.: pip install -r requirements.txt]
-
-# 3. Install frontend dependencies (if applicable)
-[your command — e.g.: cd frontend && npm install]
-
-# 4. Set up the database (if applicable)
-[your command — e.g.: python manage.py migrate]
+```sh
+python -m pip install -r src/requirements.txt
+python src/download_data.py
+python src/train.py
+python src/test_system.py
+python src/test_wsgi.py
+python src/server.py
 ```
 
-## Running the Application
+Visit http://127.0.0.1:8765. Click Storm scenario, inspect an asset, inspect unassigned maintenance jobs, and review the two model benchmarks. `python src/server.py --port 8766` selects another port.
 
-```bash
-# Start the backend
-[your command — e.g.: uvicorn app.main:app --reload]
+Training generates models locally. Do not copy joblib files from strangers. The downloader preserves existing submission metadata and validator files. ETT downloads include SHA-256 provenance and the source license.
 
-# Start the frontend (in a separate terminal, if applicable)
-[your command — e.g.: cd frontend && npm run dev]
+## Existing Codex workspace
+
+This workspace has a local `.deps` directory. `src/bootstrap.py` loads it automatically. The bundled Python used here is `C:/Users/aryan/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe`. A normal clean clone should use the virtual environment procedure above.
+
+## IBM Bob
+
+```sh
+python src/configure_bob.py
+python src/test_mcp.py
 ```
 
-The application will be available at: `http://localhost:[PORT]`
-
-## Running Tests
-
-```bash
-[your test command — e.g.: pytest tests/ -v]
-```
-
-## Quick Demo (Optional)
-
-If you have a demo script or sample data to showcase the project quickly:
-
-```bash
-[e.g.: python demo/seed_demo_data.py]
-[e.g.: open http://localhost:8000/demo]
-```
+The first command writes local absolute paths to `.bob/mcp.json`, preserving other configured servers. Open the repository in Bob, sign in, enable MCP servers and inspect GridWatch's tools. Request the prompt in `demo/bob-prompts.md`. This uses project-level stdio configuration documented at https://bob.ibm.com/docs/ide/configuration/mcp/mcp-in-bob.
 
 ## Troubleshooting
 
-| Issue | Solution |
+| Symptom | Resolution |
 |---|---|
-| [e.g., `ModuleNotFoundError`] | [e.g., Run `pip install -r requirements.txt` again] |
-| [e.g., Database connection refused] | [e.g., Ensure PostgreSQL is running: `docker compose up db`] |
-| [e.g., watsonx.ai 401 error] | [e.g., Check `WATSONX_API_KEY` in your `.env` file] |
+| Missing scikit-learn or MCP | Activate the environment and install src/requirements.txt |
+| Missing model artifact | Run the downloader, then src/train.py |
+| Download blocked | Allow access to PyPI and raw.githubusercontent.com |
+| Port occupied | Add --port 8766 and use that port in the browser |
+| Bob cannot start Python | Regenerate its configuration using the correct environment's Python |
+| DLL access denied in a restricted runner | Run the same command in a permitted local terminal |
+
+## Hosted demo
+
+Use [deployment guide](deployment.md) for Render and Vercel. The public API uses `src/wsgi.py` with Gunicorn; keep `src/server.py` for localhost development. Vercel requires `GRIDWATCH_API_URL` at build time. No environment variable is required for the local dashboard, and `.env` files are not loaded automatically. All supported configuration is documented in `src/.env.example`.
+
+## Submission readiness
+
+Fill team identity in submission.yaml, upload a 3–5 minute demo and put the accessible URL in demo/demo-video-link.txt. Create a public repository using the official template, copy this project into it without modifying `.github/workflows/validate.yml`, push, verify the action and submit the URL through the organiser's form. Do not claim submission is complete while these remain pending.

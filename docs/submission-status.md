@@ -21,4 +21,4 @@ Still required before submission:
 
 Both `Backend tests` and the organizer's `Validate Submission` workflow passed after the production URLs were recorded.
 
-The 3:39 demonstration is stored at `demo/gridwatch-demo.mp4` and linked from `demo/demo-video-link.txt`. Do not treat the unverified Bob UI connection as complete. A public repository and live website do not constitute entry-form submission.
+The 3:39 demonstration is stored at `demo/gridwatch-demo.mp4`; `demo/demo-video-link.txt` points to its Google Drive viewer link. Do not treat the unverified Bob UI connection as complete. A public repository and live website do not constitute entry-form submission.

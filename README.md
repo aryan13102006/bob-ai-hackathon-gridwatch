@@ -31,7 +31,14 @@ Open http://127.0.0.1:8765. Full instructions: [setup guide](docs/setup-guide.md
 
 ## Team
 
-Team: **GridWatch**. Track: **AI**. Team lead: **Vivaa Rathod**. Deployment account and submission contact: **Aryan Chanpa** (`aryanchanpa13@gmail.com`).
+Team: **GridWatch**. Track: **AI**.
+
+| Member | Role | Email |
+| --- | --- | --- |
+| **Vivaa Rathod** | Team Lead · Backend & API | `24ee055@charusat.edu.in` |
+| **Aryan Chanpa** | Machine Learning & Data | `24cs011@charusat.edu.in` |
+| **Krishna Patel** | Frontend & UI | `24ec107@charusat.edu.in` |
+| **Yesha Parsana** | Product & Integration | `24ec091@charusat.edu.in` |
 
 ## Stack
 

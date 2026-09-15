@@ -13,11 +13,12 @@ Verified public services:
 
 The live frontend loaded model results from Render and a storm scenario updated the equipment alerts, customer exposure and crew queue.
 
-Still required before submission:
+Team metadata is complete: Vivaa Rathod is the lead; Aryan Chanpa, Krishna Patel and Yesha Parsana are members. All four institutional email addresses are recorded in `submission.yaml` and the README.
 
-1. Add Vivaa Rathod's email and the remaining team-member email addresses. Vivaa Rathod is the official team lead; Aryan Chanpa's email remains the submission and deployment contact until Vivaa's address is supplied.
-2. Verify the configured MCP server in a signed-in IBM Bob session and record its actual tool usage.
-3. Submit the repository URL through the organiser's entry form. Its URL has not been supplied.
+Still required outside the repository:
+
+1. Verify the configured MCP server in a signed-in IBM Bob session and record its actual tool usage if the submitted video does not already show it.
+2. Submit the repository URL through the organiser's entry form. Its URL has not been supplied.
 
 Both `Backend tests` and the organizer's `Validate Submission` workflow passed after the production URLs were recorded.
 

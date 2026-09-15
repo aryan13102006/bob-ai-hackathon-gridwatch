@@ -4,10 +4,22 @@
     "track": "AI",
     "lead": {
       "name": "Vivaa Rathod",
-      "email": "aryanchanpa13@gmail.com"
+      "email": "24ee055@charusat.edu.in"
     },
-    "contact_note": "Aryan Chanpa's email is used as the submission and deployment contact until Vivaa Rathod's email is supplied.",
-    "members": []
+    "members": [
+      {
+        "name": "Aryan Chanpa",
+        "email": "24cs011@charusat.edu.in"
+      },
+      {
+        "name": "Krishna Patel",
+        "email": "24ec107@charusat.edu.in"
+      },
+      {
+        "name": "Yesha Parsana",
+        "email": "24ec091@charusat.edu.in"
+      }
+    ]
   },
   "submission": {
     "title": "GridWatch: U1 Outage and Equipment Advisor",
@@ -40,7 +52,7 @@
       ]
     },
     "what_we_are_most_proud_of": "Inspectable evidence, reproducible evaluation and explicit unassigned jobs.",
-    "known_limitations": "Failure data, topology and weather are synthetic. No field outage accuracy, live weather or dispatch. IBM Bob UI verification and final teammate contact details remain pending."
+    "known_limitations": "Failure data, topology and weather are synthetic. No field outage accuracy, live weather or dispatch."
   },
   "artifacts": {
     "source_code": "src/",

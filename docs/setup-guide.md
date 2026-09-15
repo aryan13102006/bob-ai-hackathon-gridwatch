@@ -57,4 +57,4 @@ Use [deployment guide](deployment.md) for Render and Vercel. The public API uses
 
 ## Submission readiness
 
-Fill team identity in submission.yaml, upload a 3–5 minute demo and put the accessible URL in demo/demo-video-link.txt. Create a public repository using the official template, copy this project into it without modifying `.github/workflows/validate.yml`, push, verify the action and submit the URL through the organiser's form. Do not claim submission is complete while these remain pending.
+Team identity, the 3:39 demo link, public repository, live services and presentation are complete. The organizer workflow remains unchanged. Before final entry, confirm the Google Drive video is available to anyone with the link, verify the IBM Bob demonstration, and submit the repository URL through the organiser's form.

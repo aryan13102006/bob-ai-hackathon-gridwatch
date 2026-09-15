@@ -15,6 +15,5 @@ tmp/
 data/raw/
 models/*.joblib
 data/synthetic_history.csv
-presentation/gridwatch_u1_submission.pptx
 src/inspect_template.mjs
 .bob/mcp.json

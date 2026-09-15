@@ -1,1 +1,1 @@
-NOT DEPLOYED
+https://bob-ai-hackathon-gridwatch.vercel.app

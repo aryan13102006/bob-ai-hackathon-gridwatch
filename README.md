@@ -31,7 +31,7 @@ Open http://127.0.0.1:8765. Full instructions: [setup guide](docs/setup-guide.md
 
 ## Team
 
-Team: **GridWatch** (provisional name). Track: **AI**. Lead: **Aryan Chanpa** (`aryanchanpa13@gmail.com`, the selected account). Additional team members have not been supplied.
+Team: **GridWatch**. Track: **AI**. Deployment account and submission contact: **Aryan Chanpa** (`aryanchanpa13@gmail.com`).
 
 ## Stack
 
@@ -43,11 +43,11 @@ See [model card](docs/model-card.md) and the exact machine-readable results in m
 
 ## Demo
 
-Run locally, follow the [demo script](demo/demo-script.md), and inspect [screenshots](demo/screenshots/) and the [presentation](presentation/slides.pptx). [Live demo status](demo/live-demo-url.txt) and [video status](demo/demo-video-link.txt) are tracked separately; neither is considered complete until the corresponding URL is verified.
+Try the [live GridWatch dashboard](https://bob-ai-hackathon-gridwatch.vercel.app), follow the [demo script](demo/demo-script.md), and inspect [screenshots](demo/screenshots/) and the [presentation](presentation/slides.pptx). The [Render API health endpoint](https://bob-ai-hackathon-gridwatch.onrender.com/api/health) exposes backend status. The [video status](demo/demo-video-link.txt) remains tracked separately until a public 3–5 minute recording is supplied.
 
 ## Deployment
 
-Vercel and Render configuration is included. See [deployment guide](docs/deployment.md) for the exact settings and [submission status](docs/submission-status.md) for outstanding account and submission steps. The original organizer validator is preserved; a separate Backend tests workflow verifies model training and serving on a clean runner.
+The frontend is deployed on Vercel and the API is deployed on Render. See the [deployment guide](docs/deployment.md) for the exact settings and [submission status](docs/submission-status.md) for the remaining submission steps. The original organizer validator is preserved; a separate Backend tests workflow verifies model training and serving on a clean runner.
 
 ## What we are most proud of
 

@@ -1,6 +1,12 @@
 # Vercel frontend and Render API
 
-Deployment configuration is prepared. A configuration file is not proof of a live deployment; verified URLs belong in `demo/live-demo-url.txt` after deployment.
+Deployment is live and verified:
+
+- Frontend: https://bob-ai-hackathon-gridwatch.vercel.app
+- Backend health: https://bob-ai-hackathon-gridwatch.onrender.com/api/health
+- Source: https://github.com/aryan13102006/bob-ai-hackathon-gridwatch
+
+The Vercel frontend calls the Render backend through the configured `/api/*` proxy. The default and storm scenarios were exercised against the production services.
 
 ## Accounts and repository
 

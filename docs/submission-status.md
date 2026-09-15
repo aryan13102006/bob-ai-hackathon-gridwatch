@@ -17,9 +17,8 @@ Still required before submission:
 
 1. Add the final team-member email addresses and confirm whether Aryan Chanpa or Vivaa Rathod is the official submission lead; the current metadata uses the requested Aryan Chanpa account.
 2. Verify the configured MCP server in a signed-in IBM Bob session and record its actual tool usage.
-3. Record the 3–5 minute demonstration using demo/demo-script.md, upload it and replace demo/demo-video-link.txt with an accessible URL.
-4. Submit the repository URL through the organiser's entry form. Its URL has not been supplied.
+3. Submit the repository URL through the organiser's entry form. Its URL has not been supplied.
 
 Both `Backend tests` and the organizer's `Validate Submission` workflow passed after the production URLs were recorded.
 
-Do not treat the pending video file or unverified Bob UI connection as complete. A public repository and live website do not constitute entry-form submission.
+The 3:39 demonstration is stored at `demo/gridwatch-demo.mp4` and linked from `demo/demo-video-link.txt`. Do not treat the unverified Bob UI connection as complete. A public repository and live website do not constitute entry-form submission.

@@ -39,7 +39,7 @@
       ]
     },
     "what_we_are_most_proud_of": "Inspectable evidence, reproducible evaluation and explicit unassigned jobs.",
-    "known_limitations": "Failure data, topology and weather are synthetic. No field outage accuracy, live weather or dispatch. IBM Bob UI verification, final teammate contact details and hosted video remain pending."
+    "known_limitations": "Failure data, topology and weather are synthetic. No field outage accuracy, live weather or dispatch. IBM Bob UI verification and final teammate contact details remain pending."
   },
   "artifacts": {
     "source_code": "src/",

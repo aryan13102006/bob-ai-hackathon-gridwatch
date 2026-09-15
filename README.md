@@ -43,7 +43,7 @@ See [model card](docs/model-card.md) and the exact machine-readable results in m
 
 ## Demo
 
-Try the [live GridWatch dashboard](https://bob-ai-hackathon-gridwatch.vercel.app), follow the [demo script](demo/demo-script.md), and inspect [screenshots](demo/screenshots/) and the [presentation](presentation/slides.pptx). The [Render API health endpoint](https://bob-ai-hackathon-gridwatch.onrender.com/api/health) exposes backend status. The [video status](demo/demo-video-link.txt) remains tracked separately until a public 3–5 minute recording is supplied.
+Try the [live GridWatch dashboard](https://bob-ai-hackathon-gridwatch.vercel.app), watch the [3:39 demo video](demo/gridwatch-demo.mp4), follow the [demo script](demo/demo-script.md), and inspect [screenshots](demo/screenshots/) and the [presentation](presentation/slides.pptx). The [Render API health endpoint](https://bob-ai-hackathon-gridwatch.onrender.com/api/health) exposes backend status.
 
 ## Deployment
 

@@ -1,1 +1,1 @@
-PENDING: record and upload the 3–5 minute demo before submission.
+https://github.com/aryan13102006/bob-ai-hackathon-gridwatch/blob/main/demo/gridwatch-demo.mp4

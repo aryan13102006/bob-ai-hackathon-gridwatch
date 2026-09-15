@@ -31,7 +31,7 @@ Open http://127.0.0.1:8765. Full instructions: [setup guide](docs/setup-guide.md
 
 ## Team
 
-Team: **GridWatch**. Track: **AI**. Deployment account and submission contact: **Aryan Chanpa** (`aryanchanpa13@gmail.com`).
+Team: **GridWatch**. Track: **AI**. Team lead: **Vivaa Rathod**. Deployment account and submission contact: **Aryan Chanpa** (`aryanchanpa13@gmail.com`).
 
 ## Stack
 

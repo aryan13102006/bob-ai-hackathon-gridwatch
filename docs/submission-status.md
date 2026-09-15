@@ -15,7 +15,7 @@ The live frontend loaded model results from Render and a storm scenario updated 
 
 Still required before submission:
 
-1. Add the final team-member email addresses and confirm whether Aryan Chanpa or Vivaa Rathod is the official submission lead; the current metadata uses the requested Aryan Chanpa account.
+1. Add Vivaa Rathod's email and the remaining team-member email addresses. Vivaa Rathod is the official team lead; Aryan Chanpa's email remains the submission and deployment contact until Vivaa's address is supplied.
 2. Verify the configured MCP server in a signed-in IBM Bob session and record its actual tool usage.
 3. Submit the repository URL through the organiser's entry form. Its URL has not been supplied.
 

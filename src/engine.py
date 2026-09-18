@@ -5,7 +5,7 @@ import joblib
 from train import FEATURES
 
 NAMES=['Riverbank','Central Hospital','North Industrial','University','Old Town','Airport','East Residential','Railway','South Market','Waterworks','West Junction','Hilltop']
-LIMITS={'wind':(0,120),'rain':(0,100),'crews':(1,12)}
+LIMITS={'wind':(0,120),'rain':(0,100),'crews':(1,12),'load':(20,140)}
 
 class Advisor:
     def __init__(self):
@@ -13,8 +13,8 @@ class Advisor:
         self.metrics=json.loads((ROOT/'models/metrics.json').read_text())
         self.history=pd.read_csv(ROOT/'data/synthetic_history.csv')
 
-    def analyze(self,wind=45,rain=25,crews=3):
-        for key,v in [('wind',wind),('rain',rain),('crews',crews)]:
+    def analyze(self,wind=45,rain=25,crews=3,load=70):
+        for key,v in [('wind',wind),('rain',rain),('crews',crews),('load',load)]:
             lo,hi=LIMITS[key]
             if not isinstance(v,(int,float)) or isinstance(v,bool) or not math.isfinite(v) or not lo<=v<=hi: raise ValueError(f'{key} must be between {lo} and {hi}')
         if int(crews)!=crews: raise ValueError('crews must be an integer')
@@ -22,6 +22,10 @@ class Advisor:
         # All locations, service areas, weather and topology are fictional demo fixtures.
         frame['wind_forecast_kmh']=wind
         frame['rain_forecast_mm']=rain
+        # The entered load applies to every fictional transformer. The synthetic
+        # data generator uses 0.27 C per load percentage point for temperature.
+        frame['temperature_c']+=.27*(load-frame['load_pct'])
+        frame['load_pct']=load
         p=self.bundle['model'].predict_proba(frame[FEATURES])[:,1]
         assets=[]
         for index,(_,row) in enumerate(frame.iterrows()):
@@ -52,4 +56,4 @@ class Advisor:
         for area in ['North','Central','East','South']:
             rows=[a for a in assets if a['area']==area]
             areas.append({'area':area,'expected_customer_exposure':round(sum(a['risk']*a['customers']*(1-a['backup_fraction']) for a in rows)), 'highest_asset_risk':max(a['risk'] for a in rows)})
-        return {'mode':'Synthetic planning scenario','horizon_hours':24,'weather':{'wind_kmh':wind,'rain_mm':rain,'source':'Operator-entered scenario, not a live forecast'},'assets':assets,'areas':areas,'crews':teams,'plan':plan,'threshold':self.bundle['threshold'],'limitations':['Synthetic failure model: no field validation.','Area exposure assumes disjoint fictional customer groups, not a network power-flow calculation.','Each job includes a fixed one-hour travel allowance; no route optimization.','Plans require operator review and do not dispatch crews.'],'summary':{'flagged_assets':sum(a['alert'] for a in assets),'expected_customer_exposure':sum(a['expected_customer_exposure'] for a in areas),'unassigned_jobs':sum(p['crew']=='Unassigned' for p in plan)}}
+        return {'mode':'Synthetic planning scenario','horizon_hours':24,'weather':{'wind_kmh':wind,'rain_mm':rain,'source':'Operator-entered scenario, not a live forecast'},'load_pct':load,'assets':assets,'areas':areas,'crews':teams,'plan':plan,'threshold':self.bundle['threshold'],'limitations':['Synthetic failure model: no field validation.','The shared load and related temperature adjustment are synthetic, not measured transformer readings.','Area exposure assumes disjoint fictional customer groups, not a network power-flow calculation.','Each job includes a fixed one-hour travel allowance; no route optimization.','Plans require operator review and do not dispatch crews.'],'summary':{'flagged_assets':sum(a['alert'] for a in assets),'expected_customer_exposure':sum(a['expected_customer_exposure'] for a in areas),'unassigned_jobs':sum(p['crew']=='Unassigned' for p in plan)}}

@@ -11,6 +11,11 @@ class SystemTests(unittest.TestCase):
     def test_storm_increases_risk(self):
         normal=self.advisor.analyze(20,5,3);storm=self.advisor.analyze(85,65,3)
         self.assertGreater(sum(a['risk'] for a in storm['assets']),sum(a['risk'] for a in normal['assets']))
+    def test_transformer_load_changes_risk(self):
+        low=self.advisor.analyze(load=40);high=self.advisor.analyze(load=100)
+        self.assertGreater(sum(a['risk'] for a in high['assets']),sum(a['risk'] for a in low['assets']))
+        self.assertEqual(high['load_pct'],100)
+        self.assertTrue(all(a['sensors']['load_pct']==100 for a in high['assets']))
     def test_crew_capacity_and_skill(self):
         result=self.advisor.analyze(100,90,2)
         lookup={a['id']:a for a in result['assets']}
@@ -28,7 +33,7 @@ class SystemTests(unittest.TestCase):
         for left,right in [('train','validation'),('validation','test')]:
             self.assertLess(pd.Timestamp(split[left]['last_origin'])+pd.Timedelta(hours=24),pd.Timestamp(split[right]['first_origin']))
     def test_invalid_inputs(self):
-        for args in [(float('nan'),2,3),(10,101,3),(10,2,1.5),(10,2,0)]:
+        for args in [(float('nan'),2,3),(10,101,3),(10,2,1.5),(10,2,0),(10,2,3,19),(10,2,3,141)]:
             with self.assertRaises(ValueError):self.advisor.analyze(*args)
     def test_priority_order_and_exposure(self):
         r=self.advisor.analyze();self.assertEqual([a['priority'] for a in r['assets']],sorted([a['priority'] for a in r['assets']],reverse=True))
@@ -38,9 +43,11 @@ class SystemTests(unittest.TestCase):
         thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
         base=f'http://127.0.0.1:{server.server_port}'
         try:
-            for path in ['/','/app.js','/style.css','/api/metrics','/api/forecast','/api/analyze']:
+            for path in ['/','/app.js','/style.css','/api/metrics','/api/forecast','/api/analyze','/api/analyze?load=100']:
                 with urllib.request.urlopen(base+path) as r:self.assertEqual(r.status,200)
             with self.assertRaises(urllib.error.HTTPError) as e:urllib.request.urlopen(base+'/api/analyze?wind=nan')
+            self.assertEqual(e.exception.code,400)
+            with self.assertRaises(urllib.error.HTTPError) as e:urllib.request.urlopen(base+'/api/analyze?load=141')
             self.assertEqual(e.exception.code,400)
             with self.assertRaises(urllib.error.HTTPError) as e:urllib.request.urlopen(base+'/../models/failure.joblib')
             self.assertEqual(e.exception.code,404)

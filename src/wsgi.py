@@ -38,12 +38,13 @@ def application(environ, start_response):
             elif path == '/api/forecast':
                 data = json.loads((ROOT / 'models/forecast_trace.json').read_text())
             else:
-                params = parse_qs(query, keep_blank_values=True, max_num_fields=3)
-                if set(params) - {'wind', 'rain', 'crews'} or any(len(v) != 1 for v in params.values()):
-                    raise ValueError('Use wind, rain and crews once each')
+                params = parse_qs(query, keep_blank_values=True, max_num_fields=4)
+                if set(params) - {'wind', 'rain', 'crews', 'load'} or any(len(v) != 1 for v in params.values()):
+                    raise ValueError('Use wind, rain, crews and load once each')
                 data = advisor.analyze(float(params.get('wind', ['45'])[0]),
                                        float(params.get('rain', ['25'])[0]),
-                                       float(params.get('crews', ['3'])[0]))
+                                       float(params.get('crews', ['3'])[0]),
+                                       float(params.get('load', ['70'])[0]))
     except (ValueError, TypeError) as error:
         status, data = '400 Bad Request', {'error': str(error)}
     except Exception:

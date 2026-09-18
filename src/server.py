@@ -11,7 +11,7 @@ def create_handler(advisor):
             try:
                 q=parse_qs(url.query)
                 if url.path=='/api/analyze':
-                    result=advisor.analyze(float(q.get('wind',[45])[0]),float(q.get('rain',[25])[0]),float(q.get('crews',[3])[0]))
+                    result=advisor.analyze(float(q.get('wind',[45])[0]),float(q.get('rain',[25])[0]),float(q.get('crews',[3])[0]),float(q.get('load',[70])[0]))
                 elif url.path=='/api/metrics': result=advisor.metrics
                 elif url.path=='/api/forecast': result=json.loads((ROOT/'models/forecast_trace.json').read_text())
                 elif url.path=='/api/health': result={'status':'ok','models_loaded':True}

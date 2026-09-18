@@ -24,9 +24,11 @@ class DeploymentTests(unittest.TestCase):
             self.assertEqual(result['headers']['Cache-Control'], 'no-store')
         _, body = self.request('/api/analyze', 'wind=85&rain=65&crews=3')
         self.assertEqual(len(json.loads(body)['assets']), 12)
+        _, body = self.request('/api/analyze', 'wind=85&rain=65&load=100&crews=3')
+        self.assertEqual(json.loads(body)['load_pct'], 100)
 
     def test_rejects_bad_queries_and_methods(self):
-        for query in ['wind=nan', 'wind=1&wind=2', 'crews=1.5', 'unknown=2', 'rain=']:
+        for query in ['wind=nan', 'wind=1&wind=2', 'crews=1.5', 'unknown=2', 'rain=', 'load=141', 'load=20&load=50']:
             result, _ = self.request('/api/analyze', query)
             self.assertEqual(result['status'], '400 Bad Request')
         result, _ = self.request('/api/analyze', method='POST')

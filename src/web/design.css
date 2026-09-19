@@ -3,3 +3,37 @@
 .topbar{margin-bottom:0;height:76px}main{padding-top:26px}.intro{margin-bottom:20px}.photo-panel{min-height:280px}.workspace-hero{margin-bottom:20px}.photo-content h2{font-size:30px}.scenario{padding-top:20px;padding-bottom:20px}@media(max-width:1000px){.topbar{height:auto}.photo-panel{min-height:310px}}@media(max-width:700px){.photo-panel{min-height:220px}}
 .stat:after{display:none}.photo-content h2{font-weight:500}.results-heading span{text-align:right}
 .topbar nav{scrollbar-width:none}.topbar nav::-webkit-scrollbar{display:none}
+
+/* ── Transformer Simulation view ─────────────────────────────── */
+.sim-shell{padding:4px 0 32px}
+.sim-header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:28px;flex-wrap:wrap}
+.sim-select-wrap{display:flex;flex-direction:column;gap:6px;font-size:13px;color:#72786c;font-weight:600;min-width:220px}
+.sim-select{font:inherit;font-size:14px;border:1px solid #d0d4c8;border-radius:8px;padding:9px 12px;background:#fff;color:#242820;cursor:pointer}
+.sim-select:focus{outline:3px solid #809c40;outline-offset:3px}
+.sim-layout{display:grid;grid-template-columns:360px 1fr;gap:32px;align-items:start}
+@media(max-width:900px){.sim-layout{grid-template-columns:1fr}}
+.sim-visual-col{display:flex;flex-direction:column;gap:14px;align-items:center}
+.sim-visual-wrap{border-radius:18px;padding:22px;width:100%;max-width:380px;transition:background .4s,box-shadow .4s}
+.sim-wrap-sim-tint-red{background:rgba(192,57,43,.08);box-shadow:0 0 0 2px rgba(192,57,43,.25)}
+.sim-wrap-sim-tint-orange{background:rgba(192,112,0,.07);box-shadow:0 0 0 2px rgba(192,112,0,.22)}
+.sim-wrap-sim-tint-green{background:rgba(42,122,64,.07);box-shadow:0 0 0 2px rgba(42,122,64,.2)}
+.sim-tint-red{color:#c0392b}
+.sim-tint-orange{color:#c07000}
+.sim-tint-green{color:#2a7a40}
+.sim-svg{width:100%;height:auto;display:block}
+.sim-tank{fill:currentColor;opacity:.18;stroke:currentColor;stroke-width:2;stroke-opacity:.5}
+@keyframes sim-pulse{0%{r:55;opacity:.18}50%{r:80;opacity:.04}100%{r:55;opacity:.18}}
+.sim-pulse{animation:sim-pulse linear infinite}
+@keyframes sim-arc-flash{0%,100%{opacity:0}30%,60%{opacity:.9}45%{opacity:.3}}
+.sim-arc{stroke:currentColor;animation:sim-arc-flash ease-in-out infinite}
+.sim-status-pill{font-size:12px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;padding:7px 16px;border-radius:20px;background:color-mix(in srgb,var(--pill-color,#2a7a40) 12%,#fff);color:var(--pill-color,#2a7a40);border:1px solid color-mix(in srgb,var(--pill-color,#2a7a40) 30%,#fff);text-align:center;width:100%;max-width:380px}
+.sim-info-col{display:flex;flex-direction:column;gap:16px}
+.sim-block{background:#fff;border:1px solid #e0e4d8;border-radius:12px;padding:20px 22px;line-height:1.65;font-size:14px}
+.sim-block p{margin:0 0 4px}
+.sim-block-label{font-size:10px;font-weight:700;letter-spacing:1.5px;color:#72786c;text-transform:uppercase;margin-bottom:4px!important}
+.sim-block-title{font-size:17px;font-weight:700;margin-bottom:8px!important;letter-spacing:-.3px}
+.sim-block-critical{border-left:4px solid #c0392b;background:rgba(192,57,43,.04)}
+.sim-block-elevated{border-left:4px solid #c07000;background:rgba(192,112,0,.04)}
+.sim-block-normal{border-left:4px solid #2a7a40;background:rgba(42,122,64,.04)}
+.sim-foot{font-size:12px;margin-top:18px}
+/* ────────────────────────────────────────────────────────────── */

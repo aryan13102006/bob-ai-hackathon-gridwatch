@@ -171,6 +171,18 @@ body[data-view="overview"] .context-note { display: none; }
 .all-clear strong { color: #276b58; }
 .all-clear p { margin: 3px 0 0; color: #6e8f83; font-size: 10px; }
 .diagnostic-note { margin: 13px 0 0; color: #8096a0; font-size: 9px; line-height: 1.4; }
+.residual-life { display: grid; grid-template-columns: 150px 1fr; align-items: center; gap: 24px; margin-top: 14px; padding: 22px; border: 1px solid #ffffff33; border-radius: 19px; background: linear-gradient(125deg,#0b3147,#124f65); box-shadow: inset 0 1px #ffffff1f; }
+.life-gauge { display: grid; place-items: center; width: 136px; height: 136px; border-radius: 50%; background: conic-gradient(#64cbb1 calc(var(--life)*1%),#ffffff1c 0); box-shadow: 0 12px 28px #031c2940; }
+.life-gauge:before { content: ''; grid-area: 1/1; width: 105px; height: 105px; border-radius: 50%; background: #103e52; box-shadow: inset 0 1px #ffffff21; }
+.life-gauge>div { z-index: 1; grid-area: 1/1; text-align: center; }
+.life-gauge strong { display: block; color: #fff; font-size: 30px; font-weight: 650; line-height: 1; }
+.life-gauge span { display: block; margin-top: 6px; color: #afd5df; font-size: 9px; text-transform: uppercase; letter-spacing: .7px; }
+.life-copy h3 { margin: 5px 0 6px; color: #fff; font-family: 'Iowan Old Style',Baskerville,Georgia,serif; font-size: 25px; font-style: italic; font-weight: 600; }
+.life-copy>p { margin: 0; color: #c1dce4; font-size: 11px; line-height: 1.5; }
+.life-factors { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px; margin: 14px 0 11px; }
+.life-factors span { padding: 9px; border: 1px solid #ffffff1f; border-radius: 11px; background: #ffffff0b; color: #9fc5d0; font-size: 9px; }
+.life-factors b { display: block; margin-bottom: 3px; color: #eafaff; font-size: 16px; font-weight: 650; }
+.life-copy small { display: block; color: #86afbb; font-size: 8px; line-height: 1.45; }
 .stats { gap: 18px; margin-bottom: 23px; }
 .stat { padding: 24px; border: 1px solid #ffffff; border-radius: 23px; background: #ffffffd9; box-shadow: 0 12px 32px #3a799b10, inset 0 1px #fff; -webkit-backdrop-filter: blur(22px); backdrop-filter: blur(22px); }
 .stat:first-child { border-color: #125c91; background: linear-gradient(135deg,#155f93,#0a79a8); }
@@ -284,6 +296,10 @@ body[data-view="evidence"] .notice { margin-top: 0; }
   .focus-readings { grid-template-columns: repeat(2,1fr); }
   .issue-grid { grid-template-columns: 1fr; }
   .diagnostics-head { align-items: start; }
+  .residual-life { grid-template-columns: 115px 1fr; gap: 16px; padding: 17px; }
+  .life-gauge { width: 108px; height: 108px; }
+  .life-gauge:before { width: 82px; height: 82px; }
+  .life-gauge strong { font-size: 24px; }
   .stat { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 5px; padding: 18px 20px; }
   .stat strong { grid-column: 2; grid-row: 1/3; margin: 0; font-size: 36px; }
   .stat .muted { grid-column: 1; }
@@ -308,6 +324,9 @@ body[data-view="evidence"] .notice { margin-top: 0; }
   .mode-regulator { grid-template-columns: 1fr; }
   .mode-details { text-align: center; }
   .selected-live-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .residual-life { grid-template-columns: 1fr; }
+  .life-gauge { margin: auto; }
+  .life-copy { text-align: center; }
   .input-box { padding: 8px 6px; }
   .input-box input { font-size: 20px; }
   .input-box .unit { font-size: 9px; }

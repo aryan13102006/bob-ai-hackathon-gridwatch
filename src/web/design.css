@@ -54,3 +54,23 @@
 .sim-block-normal{border-left:4px solid #166534;background:rgba(22,101,52,.04)}
 .sim-foot{font-size:12px;margin-top:16px;color:#7b8273}
 /* ────────────────────────────────────────────────────────────── */
+
+/* Refined simulation workspace */
+.sim-shell{padding:30px;border:1px solid #fff;border-radius:26px;background:#f8fcffde;box-shadow:0 18px 50px #244f6a24,inset 0 1px #fff;-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px)}
+.sim-header{align-items:end;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid #dbe9f0}
+.sim-header h2{margin:5px 0 4px;color:#153f58;font-family:'Iowan Old Style',Baskerville,Georgia,serif;font-size:31px;font-style:italic;font-weight:600;line-height:1.05}
+.sim-header p.muted{max-width:620px;color:#6d8999;line-height:1.5}
+.sim-select-wrap{width:min(310px,100%);min-width:260px;color:#567387}
+.sim-select{width:100%;min-width:0;border-color:#c6dce8;border-radius:13px;padding:12px 14px;background:#fff;color:#173f54;box-shadow:0 5px 16px #294f6210}
+.sim-layout{grid-template-columns:minmax(280px,350px) minmax(0,1fr);gap:22px}
+.sim-visual-wrap{overflow:hidden;padding:16px;border-radius:20px}
+.sim-svg{max-height:390px}
+.sim-status-pill{padding:10px 14px;border-radius:13px;font-size:10px;line-height:1.35;overflow-wrap:anywhere}
+.sim-info-col{gap:11px}
+.sim-block{padding:18px 20px;border-color:#dbe7ed;border-radius:15px;color:#385667;font-size:13px;line-height:1.55;word-break:normal;box-shadow:0 6px 18px #234d6110}
+.sim-block-label{color:#76919f}
+.sim-block-title{color:#173f54;font-family:'Iowan Old Style',Baskerville,Georgia,serif;font-size:19px;font-style:italic;font-weight:600;line-height:1.2;overflow-wrap:anywhere}
+.sim-block p{max-width:100%;overflow-wrap:anywhere}
+.sim-foot{margin:17px 2px 0;color:#7892a0;line-height:1.5}
+@media(max-width:960px){.sim-layout{grid-template-columns:1fr}.sim-visual-col{width:min(480px,100%);margin:auto}.sim-info-col{width:100%}}
+@media(max-width:700px){.sim-shell{padding:20px;border-radius:21px}.sim-header{display:grid;grid-template-columns:1fr;gap:18px;align-items:start}.sim-select-wrap{width:100%;min-width:0}.sim-visual-wrap{padding:10px}.sim-svg{max-height:none}.sim-block{padding:17px}.sim-status-pill{font-size:9px}.sim-foot{font-size:10px}}

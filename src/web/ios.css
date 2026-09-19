@@ -164,23 +164,17 @@ dialog h1 { color: #087eaf; }
 
 /* Secondary views use the same image as a deliberately soft backdrop. */
 body[data-view="plan"] main:before,
-body[data-view="evidence"] main:before,
-body[data-view="bob"] main:before { content: ''; position: absolute; z-index: 0; top: -25px; left: -25px; right: -25px; height: 660px; background: linear-gradient(90deg,#0a2f4fae,#0c4d73a1),url('/grid-substation-editorial.png') center 42% / cover; filter: blur(11px); }
+body[data-view="evidence"] main:before { content: ''; position: absolute; z-index: 0; top: -25px; left: -25px; right: -25px; height: 660px; background: linear-gradient(90deg,#0a2f4fae,#0c4d73a1),url('/grid-substation-editorial.png') center 42% / cover; filter: blur(11px); }
 body[data-view="plan"] main:after,
-body[data-view="evidence"] main:after,
-body[data-view="bob"] main:after { content: ''; position: absolute; z-index: 0; top: 430px; left: 0; right: 0; height: 250px; background: linear-gradient(transparent,#eef6fc); pointer-events: none; }
+body[data-view="evidence"] main:after { content: ''; position: absolute; z-index: 0; top: 430px; left: 0; right: 0; height: 250px; background: linear-gradient(transparent,#eef6fc); pointer-events: none; }
 body[data-view="plan"] .intro,
-body[data-view="evidence"] .intro,
-body[data-view="bob"] .intro { min-height: 258px; margin: 0; padding: 145px 5.3% 30px; color: white; }
+body[data-view="evidence"] .intro { min-height: 258px; margin: 0; padding: 145px 5.3% 30px; color: white; }
 body[data-view="plan"] .intro h1,
-body[data-view="evidence"] .intro h1,
-body[data-view="bob"] .intro h1 { color: white; font-size: clamp(33px,3.2vw,45px); text-shadow: 0 2px 18px #09334f91; }
+body[data-view="evidence"] .intro h1 { color: white; font-size: clamp(33px,3.2vw,45px); text-shadow: 0 2px 18px #09334f91; }
 body[data-view="plan"] .intro p:not(.eyebrow),
-body[data-view="evidence"] .intro p:not(.eyebrow),
-body[data-view="bob"] .intro p:not(.eyebrow) { color: #e1f4fc; }
+body[data-view="evidence"] .intro p:not(.eyebrow) { color: #e1f4fc; }
 body[data-view="plan"] .context-note,
-body[data-view="evidence"] .context-note,
-body[data-view="bob"] .context-note { color: #d8ebf6; }
+body[data-view="evidence"] .context-note { color: #d8ebf6; }
 body[data-view="plan"] .workspace-hero { height: 700px; }
 body[data-view="plan"] .photo-panel { display: none; }
 body[data-view="plan"] .scenario { top: 0; bottom: auto; right: 5.3%; width: min(620px,49%); }
@@ -190,8 +184,7 @@ body[data-view="plan"] .scenario { top: 0; bottom: auto; right: 5.3%; width: min
   body[data-view="overview"] .scenario { left: 7.5%; right: auto; bottom: 75px; width: min(620px,85%); }
   body[data-view="plan"] .scenario { width: min(620px,62%); }
 }
-body[data-view="evidence"] .notice,
-body[data-view="bob"] .notice { margin-top: 0; }
+body[data-view="evidence"] .notice { margin-top: 0; }
 
 @media (max-width: 1000px) {
   .topbar { width: calc(100% - 24px); padding: 0 12px; gap: 7px; }
@@ -236,19 +229,15 @@ body[data-view="bob"] .notice { margin-top: 0; }
   .layout { grid-template-columns: 1fr; }
   .panel { padding: 19px; }
   body[data-view="plan"] .intro,
-  body[data-view="evidence"] .intro,
-  body[data-view="bob"] .intro { min-height: 295px; padding: 154px 5% 20px; }
+  body[data-view="evidence"] .intro { min-height: 295px; padding: 154px 5% 20px; }
   body[data-view="plan"] .intro h1,
-  body[data-view="evidence"] .intro h1,
-  body[data-view="bob"] .intro h1 { font-size: 32px; }
+  body[data-view="evidence"] .intro h1 { font-size: 32px; }
   body[data-view="plan"] .context-note,
-  body[data-view="evidence"] .context-note,
-  body[data-view="bob"] .context-note { display: none; }
+  body[data-view="evidence"] .context-note { display: none; }
   body[data-view="plan"] .workspace-hero { height: 740px; }
   body[data-view="plan"] .scenario { top: 0; bottom: auto; left: 4%; right: 4%; width: 92%; }
   body[data-view="plan"] main:before,
-  body[data-view="evidence"] main:before,
-  body[data-view="bob"] main:before { height: 740px; }
+  body[data-view="evidence"] main:before { height: 740px; }
   footer { display: block; line-height: 1.8; }
 }
 @media (max-width: 390px) {

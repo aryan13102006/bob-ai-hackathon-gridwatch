@@ -1,4 +1,4 @@
-let state,metrics,trace,view='overview';
+let state,metrics,trace,view='overview',liveTimer,runInFlight=false,telemetryPhase=Date.now()/40000,lastAlertKey='',dismissedAlertKey='';
 const $=id=>document.getElementById(id),fmt=n=>Math.round(n).toLocaleString(),pct=n=>(n*100).toFixed(1)+'%';
 const scenarioInputIds=['wind','rain','load','crews'];
 async function get(url){let r;try{r=await fetch(url,{signal:AbortSignal.timeout(70000)})}catch(e){throw Error('The demo backend is starting or unavailable. Wait a moment, then click Analyze scenario to retry.')}const isJSON=(r.headers.get('content-type')||'').includes('application/json');const d=isJSON?await r.json():{};if(!r.ok||!isJSON)throw Error(d.error||'The demo backend is waking up. Please retry shortly.');return d}
@@ -12,7 +12,46 @@ where to stage crews, and which jobs remain unassigned.
 Use get_model_evaluation to state the evidence and limitations.</pre><h3>Available tools</h3><p><b>assess_grid_risk</b> — model probabilities, feature sensitivity, ranked assets and crew plan.<br><b>get_model_evaluation</b> — measured holdout performance and provenance.</p><p class="notice">Connection status must be verified inside IBM Bob. This dashboard does not claim an active Bob session or generate LLM responses itself.</p></section>`}
 function detail(id){const a=state.assets.find(a=>a.id===id);$('detail-body').innerHTML=`<p class="eyebrow">${a.id} / ${a.area}</p><h2>${a.name}</h2><h1>${pct(a.risk)} <span class="muted">synthetic failure risk</span></h1><p>${fmt(a.customers)} customers · ${a.critical_sites} critical sites · ${pct(a.backup_fraction)} backup coverage</p><h3>Largest positive feature sensitivities</h3><p class="muted">Change in model output when one feature is replaced with its training median. This is sensitivity, not proof of a physical cause.</p><table>${a.evidence.map(e=>`<tr><td>${e.feature.replaceAll('_',' ')}</td><td>${e.value}</td><td>${e.risk_delta>=0?'+':''}${(100*e.risk_delta).toFixed(1)} points</td></tr>`).join('')}</table><h3>Sensor snapshot</h3><table>${Object.entries(a.sensors).map(([k,v])=>`<tr><td>${k.replaceAll('_',' ')}</td><td>${v}</td></tr>`).join('')}</table><p>Proposed action: ${a.task}</p>`;$('detail').showModal()}
 function render(){if(!state)return;document.body.dataset.view=view;const titles={overview:'Your grid, in perspective.',plan:'A plan for every priority.',evidence:'The evidence behind the model.',bob:'Meet your grid advisor.'};$('subtitle').textContent=({overview:'Know where to look. Decide what comes next.',plan:'Turn equipment risk into an actionable maintenance queue.',evidence:'Measured performance. Transparent limitations.',bob:'Connect IBM Bob to your equipment intelligence.'})[view];$('workspace-hero').classList.toggle('hidden',['evidence','bob'].includes(view));$('title').textContent=titles[view];$('content').innerHTML=({overview,plan,evidence,bob})[view]();document.querySelectorAll('[data-asset]').forEach(el=>{el.onclick=()=>detail(el.dataset.asset);el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();detail(el.dataset.asset)}}});if($('export'))$('export').onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='gridwatch-plan.json';a.click();URL.revokeObjectURL(url)}}
-async function run(){
+function conditionNotice(){
+  const hottest=Math.max(...state.assets.map(a=>a.sensors.temperature_c));
+  const riskiest=state.assets.reduce((best,a)=>a.risk>best.risk?a:best,state.assets[0]);
+  const load=Number(state.load_pct);
+  let level='';
+  if(load>=110||hottest>=90||riskiest.risk>=.8) level='critical';
+  else if(load>=95||hottest>=82||riskiest.risk>=.65) level='warning';
+  if(!level){$('condition-alert').hidden=true;lastAlertKey='';dismissedAlertKey='';return}
+  const key=`${level}:${riskiest.id}`;
+  const title=level==='critical'?'Critical transformer condition':'Transformer condition warning';
+  const message=`${riskiest.name} is at ${pct(riskiest.risk)} synthetic risk. Load ${Math.round(load)}%, highest temperature ${hottest.toFixed(1)}°C.`;
+  $('condition-alert').className=`condition-alert ${level}`;
+  $('alert-level').textContent=level==='critical'?'Critical condition':'Attention needed';
+  $('alert-title').textContent=title;
+  $('alert-message').textContent=message;
+  if(key!==dismissedAlertKey)$('condition-alert').hidden=false;
+  if(key!==lastAlertKey&&'Notification' in window&&Notification.permission==='granted') new Notification(`GridWatch: ${title}`,{body:message,tag:'gridwatch-condition'});
+  lastAlertKey=key;
+}
+function setLiveFeed(active){
+  clearInterval(liveTimer);liveTimer=null;
+  $('live-toggle').setAttribute('aria-pressed',String(active));
+  $('live-toggle').textContent=active?'Pause live feed':'Resume live feed';
+  if(!active)return;
+  liveTimer=setInterval(()=>{if(!runInFlight){advanceSyntheticTelemetry();run('live')}},8000);
+}
+function advanceSyntheticTelemetry(){
+  telemetryPhase+=.22;
+  $('load').value=Math.round(82+30*Math.sin(telemetryPhase));
+  $('wind').value=Math.round(42+32*Math.sin(telemetryPhase*.73+1.1));
+  $('rain').value=Math.round(27+25*Math.sin(telemetryPhase*.51-1.4));
+}
+async function enableBrowserAlerts(){
+  if(!('Notification' in window)){$('alerts-toggle').textContent='In-app alerts on';return}
+  const permission=await Notification.requestPermission();
+  $('alerts-toggle').textContent=permission==='granted'?'Browser alerts on':'In-app alerts on';
+}
+async function run(source='manual'){
+  if(runInFlight)return;
+  runInFlight=true;
   const button=$('run');
   button.disabled=true;
   scenarioInputIds.forEach(id=>$(id).disabled=true);
@@ -25,6 +64,8 @@ async function run(){
     const params=new URLSearchParams(scenarioInputIds.map(id=>[id,$(id).value]));
     state=await get(`/api/analyze?${params}`);
     render();
+    conditionNotice();
+    $('telemetry-time').textContent=`Last synthetic reading · ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'})}`;
     $('scenario-status').textContent='Analysis up to date';
     $('scenario-status').classList.remove('pending-note');
   }catch(e){
@@ -35,8 +76,16 @@ async function run(){
     scenarioInputIds.forEach(id=>$(id).disabled=false);
     button.textContent='Analyze scenario ↗';
     $('storm').disabled=false;
+    runInFlight=false;
   }
 }
-document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{view=b.dataset.view;document.querySelectorAll('[data-view]').forEach(x=>(x.classList.toggle('active',x===b),x.setAttribute('aria-current',x===b?'page':'false')));render()});$('run').onclick=run;$('storm').onclick=()=>{$('wind').value=85;$('rain').value=65;run()};$('close').onclick=()=>$('detail').close();run();
+document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{view=b.dataset.view;document.querySelectorAll('[data-view]').forEach(x=>(x.classList.toggle('active',x===b),x.setAttribute('aria-current',x===b?'page':'false')));render()});
+$('run').onclick=()=>run('manual');
+$('storm').onclick=()=>{setLiveFeed(false);$('wind').value=105;$('rain').value=80;$('load').value=125;run('manual')};
+$('live-toggle').onclick=()=>{const active=$('live-toggle').getAttribute('aria-pressed')!=='true';setLiveFeed(active);if(active&&!runInFlight){advanceSyntheticTelemetry();run('live')}};
+$('alerts-toggle').onclick=enableBrowserAlerts;
+$('alert-close').onclick=()=>{dismissedAlertKey=lastAlertKey;$('condition-alert').hidden=true};
+$('close').onclick=()=>$('detail').close();
+run('live').finally(()=>setLiveFeed(true));
 
-scenarioInputIds.forEach(id=>$(id).addEventListener('input',()=>{$('scenario-status').textContent='Changes not applied';$('scenario-status').classList.add('pending-note')}));
+scenarioInputIds.forEach(id=>$(id).addEventListener('input',()=>{setLiveFeed(false);$('scenario-status').textContent='Changes not applied';$('scenario-status').classList.add('pending-note')}));

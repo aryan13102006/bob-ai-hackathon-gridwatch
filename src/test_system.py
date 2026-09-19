@@ -43,7 +43,7 @@ class SystemTests(unittest.TestCase):
         thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
         base=f'http://127.0.0.1:{server.server_port}'
         try:
-            for path in ['/','/app.js','/style.css','/api/metrics','/api/forecast','/api/analyze','/api/analyze?load=100']:
+            for path in ['/','/app.js','/style.css','/grid-substation-editorial.png','/api/metrics','/api/forecast','/api/analyze','/api/analyze?load=100']:
                 with urllib.request.urlopen(base+path) as r:self.assertEqual(r.status,200)
             with self.assertRaises(urllib.error.HTTPError) as e:urllib.request.urlopen(base+'/api/analyze?wind=nan')
             self.assertEqual(e.exception.code,400)

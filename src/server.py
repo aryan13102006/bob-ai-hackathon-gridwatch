@@ -15,10 +15,10 @@ def create_handler(advisor):
                 elif url.path=='/api/metrics': result=advisor.metrics
                 elif url.path=='/api/forecast': result=json.loads((ROOT/'models/forecast_trace.json').read_text())
                 elif url.path=='/api/health': result={'status':'ok','models_loaded':True}
-                elif url.path in ['/','/app.js','/style.css','/design.css','/ios.css','/grid-substation.png','/grid-substation-enhanced.png','/grid-engineers.png']:
-                    name={'/':'index.html','/app.js':'app.js','/style.css':'style.css','/design.css':'design.css','/ios.css':'ios.css','/grid-substation.png':'grid-substation.png','/grid-substation-enhanced.png':'grid-substation-enhanced.png','/grid-engineers.png':'grid-engineers.png'}[url.path]
+                elif url.path in ['/','/app.js','/style.css','/design.css','/ios.css','/grid-substation.png','/grid-substation-enhanced.png','/grid-substation-editorial.png','/grid-engineers.png']:
+                    name={'/':'index.html','/app.js':'app.js','/style.css':'style.css','/design.css':'design.css','/ios.css':'ios.css','/grid-substation.png':'grid-substation.png','/grid-substation-enhanced.png':'grid-substation-enhanced.png','/grid-substation-editorial.png':'grid-substation-editorial.png','/grid-engineers.png':'grid-engineers.png'}[url.path]
                     payload=(ROOT/'src/web'/name).read_bytes()
-                    self.send_response(200);self.send_header('Content-Type',{'index.html':'text/html','app.js':'text/javascript','style.css':'text/css','design.css':'text/css','ios.css':'text/css','grid-substation.png':'image/png','grid-substation-enhanced.png':'image/png','grid-engineers.png':'image/png'}[name]+'; charset=utf-8');self.end_headers();self.wfile.write(payload);return
+                    self.send_response(200);self.send_header('Content-Type',{'index.html':'text/html','app.js':'text/javascript','style.css':'text/css','design.css':'text/css','ios.css':'text/css','grid-substation.png':'image/png','grid-substation-enhanced.png':'image/png','grid-substation-editorial.png':'image/png','grid-engineers.png':'image/png'}[name]+'; charset=utf-8');self.end_headers();self.wfile.write(payload);return
                 else: self.send_error(404);return
                 payload=json.dumps(result,allow_nan=False).encode()
                 self.send_response(200);self.send_header('Content-Type','application/json');self.send_header('Cache-Control','no-store');self.end_headers();self.wfile.write(payload)

@@ -24,6 +24,10 @@ function diagnoseTransformer(asset){
   return issues.sort((a,b)=>(a.severity==='critical'?0:1)-(b.severity==='critical'?0:1));
 }
 function residualLife(asset){
+  if(asset.residual_life){
+    const life=asset.residual_life,f=life.factors;
+    return {value:life.percentage,label:life.label,age:f.age_profile_pct,incidents:f.incident_history_pct,insulation:f.insulation_health_pct};
+  }
   const s=asset.sensors,clamp=value=>Math.max(0,Math.min(100,value));
   const age=clamp(100-(s.age_years/45)*100);
   const incidents=clamp(100-s.incidents_90d*1.1);

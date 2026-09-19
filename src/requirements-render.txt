@@ -1,2 +1,3 @@
 -r requirements-core.txt
 gunicorn==26.2.0
+pymongo[srv]==4.11.3

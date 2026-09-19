@@ -11,6 +11,7 @@ flowchart LR
   A --> P[Impact ranking and crew heuristic]
   P --> H[WSGI API on Render / Gunicorn]
   H --> V[Vercel API proxy]
+  H --> R[(MongoDB residual life only)]
   V --> D[Static browser dashboard on Vercel]
   P --> MCP[MCP tools over stdio]
   MCP --> B[IBM Bob operator brief]
@@ -22,6 +23,7 @@ flowchart LR
 | Artifacts | joblib and JSON | Local trained models, metrics and forecast traces |
 | Advisor | Python | Scenario validation, probabilities, impact and constrained crew assignments |
 | Public demo API | WSGI + Gunicorn on Render | Read-only JSON routes, bounded inputs and health checks |
+| Residual-life store | MongoDB Atlas | One compact upserted document per transformer; no raw telemetry history |
 | Local API | ThreadingHTTPServer | Local development and fixed static routes |
 | Hosting | Vercel + Render | Static frontend, same-origin API proxy and model build |
 | UI | Vanilla JavaScript and SVG | Scenario controls, schematic, equipment details and evidence |

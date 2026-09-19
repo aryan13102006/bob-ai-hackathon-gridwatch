@@ -25,11 +25,20 @@ Connect the repository and create a Blueprint using the root `render.yaml`, or u
 | Build | `pip install -r src/requirements-render.txt && python src/download_data.py && python src/train.py` |
 | Start | `gunicorn --chdir src wsgi:application --bind 0.0.0.0:$PORT --workers 1 --threads 2 --timeout 120 --access-logfile -` |
 | Health check | `/api/health` |
-| Environment | `OPENBLAS_NUM_THREADS=1`, `OMP_NUM_THREADS=1` |
+| Environment | `OPENBLAS_NUM_THREADS=1`, `OMP_NUM_THREADS=1`, secret `MONGODB_URI` |
 
 Render supplies `PORT`. Models are trained within the build using pinned package versions and the seeded simulator. No model download from an untrusted source and no API key are needed. Only read-only JSON endpoints are exposed by the WSGI adapter. IBM Bob's stdio MCP server continues to run locally.
 
 Wait for a successful deploy, then visit the service's real `/api/health` URL. It must return `status: ok` and `models_loaded: true`. Also test `/api/analyze?wind=85&rain=65&crews=3`, `/api/metrics`, and `/api/forecast`.
+
+### Residual-life MongoDB collection
+
+Set `MONGODB_URI` in Render to the MongoDB Atlas connection string. The optional
+`MONGODB_DATABASE` and `MONGODB_COLLECTION` values default to `gridwatch` and
+`transformer_residual_life`. The API uses each transformer ID as MongoDB `_id`
+and replaces that document when its residual-life calculation changes. The
+collection therefore stays at one compact document per transformer and does
+not store live telemetry, weather, customer exposure, or analysis history.
 
 ## 2. Vercel frontend
 

@@ -6,11 +6,17 @@ from functools import lru_cache
 from urllib.parse import parse_qs
 
 from engine import Advisor
+from residual_life import ResidualLifeStore, add_residual_life
 
 
 @lru_cache(maxsize=1)
 def get_advisor():
     return Advisor()
+
+
+@lru_cache(maxsize=1)
+def get_residual_life_store():
+    return ResidualLifeStore()
 
 
 def application(environ, start_response):
@@ -32,7 +38,8 @@ def application(environ, start_response):
         else:
             advisor = get_advisor()
             if path == '/api/health':
-                data = {'status': 'ok', 'models_loaded': True, 'mode': 'synthetic-demo'}
+                data = {'status': 'ok', 'models_loaded': True, 'mode': 'synthetic-demo',
+                        'residual_life_database': 'configured' if get_residual_life_store().configured else 'not-configured'}
             elif path == '/api/metrics':
                 data = advisor.metrics
             elif path == '/api/forecast':
@@ -45,6 +52,7 @@ def application(environ, start_response):
                                        float(params.get('rain', ['25'])[0]),
                                        float(params.get('crews', ['3'])[0]),
                                        float(params.get('load', ['70'])[0]))
+                add_residual_life(data, get_residual_life_store())
     except (ValueError, TypeError) as error:
         status, data = '400 Bad Request', {'error': str(error)}
     except Exception:

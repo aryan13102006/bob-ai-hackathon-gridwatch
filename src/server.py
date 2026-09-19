@@ -3,8 +3,10 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse, parse_qs
 import json, argparse
 from engine import Advisor
+from residual_life import ResidualLifeStore, add_residual_life
 
-def create_handler(advisor):
+def create_handler(advisor, residual_life_store=None):
+    residual_life_store = residual_life_store or ResidualLifeStore()
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self):
             url=urlparse(self.path)
@@ -12,9 +14,10 @@ def create_handler(advisor):
                 q=parse_qs(url.query)
                 if url.path=='/api/analyze':
                     result=advisor.analyze(float(q.get('wind',[45])[0]),float(q.get('rain',[25])[0]),float(q.get('crews',[3])[0]),float(q.get('load',[70])[0]))
+                    add_residual_life(result,residual_life_store)
                 elif url.path=='/api/metrics': result=advisor.metrics
                 elif url.path=='/api/forecast': result=json.loads((ROOT/'models/forecast_trace.json').read_text())
-                elif url.path=='/api/health': result={'status':'ok','models_loaded':True}
+                elif url.path=='/api/health': result={'status':'ok','models_loaded':True,'residual_life_database':'configured' if residual_life_store.configured else 'not-configured'}
                 elif url.path in ['/','/app.js','/style.css','/design.css','/ios.css','/grid-substation.png','/grid-substation-enhanced.png','/grid-substation-editorial.png','/grid-engineers.png']:
                     name={'/':'index.html','/app.js':'app.js','/style.css':'style.css','/design.css':'design.css','/ios.css':'ios.css','/grid-substation.png':'grid-substation.png','/grid-substation-enhanced.png':'grid-substation-enhanced.png','/grid-substation-editorial.png':'grid-substation-editorial.png','/grid-engineers.png':'grid-engineers.png'}[url.path]
                     payload=(ROOT/'src/web'/name).read_bytes()

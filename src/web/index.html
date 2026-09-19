@@ -6,7 +6,8 @@
 <section class="scenario" aria-label="Scenario controls">
   <div class="section-kicker"><h2>Live grid conditions</h2><span class="subtle-tag"><i></i> SYNTHETIC LIVE</span></div>
   <div class="telemetry-row"><span id="telemetry-time">Waiting for first reading</span><button id="alerts-toggle" type="button" aria-label="Enable browser alerts">Enable alerts</button></div>
-  <p>Choose an operating envelope. Live readings stay inside that mode until you change it.</p>
+  <label class="live-transformer-picker" for="live-transformer-select"><span>Transformer being monitored</span><select id="live-transformer-select"><option value="TX-001">TX-001 — Riverbank</option><option value="TX-002">TX-002 — Central Hospital</option><option value="TX-003">TX-003 — North Industrial</option><option value="TX-004">TX-004 — University</option><option value="TX-005">TX-005 — Old Town</option><option value="TX-006">TX-006 — Airport</option><option value="TX-007">TX-007 — East Residential</option><option value="TX-008">TX-008 — Railway</option><option value="TX-009">TX-009 — South Market</option><option value="TX-010">TX-010 — Waterworks</option><option value="TX-011">TX-011 — West Junction</option><option value="TX-012">TX-012 — Hilltop</option></select></label>
+  <p>Choose an operating envelope for this transformer. Its readings update every eight seconds.</p>
   <div class="mode-regulator">
     <div class="mode-dial" id="mode-dial" data-mode="normal" role="radiogroup" aria-label="Live operating mode">
       <div class="dial-face" aria-hidden="true"><span class="dial-pointer"></span><b id="mode-number">1</b></div>
@@ -16,13 +17,9 @@
     </div>
     <div class="mode-details"><span id="mode-kicker">NORMAL ENVELOPE</span><strong id="mode-title">Stable operation</strong><p id="mode-description">Routine synthetic load and weather variation.</p></div>
   </div>
-  <div class="controls">
-    <label for="wind">Wind speed<div class="input-box"><input id="wind" aria-label="Wind speed" type="number" min="0" max="120" value="45"><span class="unit">km/h</span></div></label>
-    <label for="rain">Rainfall<div class="input-box"><input id="rain" aria-label="Rainfall" type="number" min="0" max="100" value="25"><span class="unit">mm</span></div></label>
-    <label for="load">Transformer load<div class="input-box"><input id="load" aria-label="Transformer load, percent of rated capacity" type="number" min="20" max="140" value="70"><span class="unit">%</span></div></label>
-    <label for="crews">Available crews<div class="input-box"><input id="crews" aria-label="Available crews" type="number" min="1" max="12" value="3"><span class="unit">teams</span></div></label>
-  </div>
-  <div class="scenario-actions"><button id="run" class="primary">Analyze scenario ↗</button><button id="live-toggle" aria-pressed="true">Pause live feed</button></div>
+  <div class="selected-live-grid" aria-live="polite"><div><span>24h risk</span><strong id="live-risk">—</strong></div><div><span>Transformer load</span><strong id="live-load">—</strong></div><div><span>Temperature</span><strong id="live-temperature">—</strong></div><div><span>Vibration</span><strong id="live-vibration">—</strong></div></div>
+  <div class="scenario-inputs" hidden><input id="wind" type="number" value="45"><input id="rain" type="number" value="25"><input id="load" type="number" value="70"><input id="crews" type="number" value="3"></div>
+  <div class="scenario-actions"><button id="run" class="primary">Refresh now ↗</button><button id="live-toggle" aria-pressed="true">Pause live feed</button></div>
   <div class="scenario-foot"><span>New synthetic reading every 8 seconds.</span><span id="scenario-status" role="status">Starting live feed…</span></div>
 </section></div>
 <p class="notice"><b>Simulation, clearly labelled.</b> Live conditions and asset risks are synthetic. Temperature forecasting uses real ETT observations. Plans remain subject to operator review.</p><p id="error" role="alert"></p><div id="content" aria-live="polite">Loading your grid analysis…</div><footer><strong>GridWatch / Intelligence for the grid.</strong><span>Local prototype · Illustrative assets · No automatic dispatch</span></footer></main><aside id="condition-alert" class="condition-alert" role="alert" aria-live="assertive" hidden><div><span id="alert-level">Attention</span><strong id="alert-title">Transformer condition changed</strong><p id="alert-message"></p><button id="alert-action" class="alert-action" hidden>Review crew response</button></div><button id="alert-close" aria-label="Dismiss notification">×</button></aside><dialog id="detail"><button id="close" aria-label="Close equipment detail">Close ✕</button><div id="detail-body"></div></dialog></body></html>

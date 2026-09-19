@@ -1,6 +1,11 @@
-let state,metrics,trace,view='overview',liveTimer,runInFlight=false,telemetryPhase=Date.now()/40000,lastAlertKey='',dismissedAlertKey='';
+let state,metrics,trace,view='overview',liveTimer,runInFlight=false,telemetryPhase=Date.now()/40000,lastAlertKey='',dismissedAlertKey='',currentMode='normal';
 const $=id=>document.getElementById(id),fmt=n=>Math.round(n).toLocaleString(),pct=n=>(n*100).toFixed(1)+'%';
 const scenarioInputIds=['wind','rain','load','crews'];
+const liveModes={
+  normal:{number:'1',kicker:'NORMAL ENVELOPE',title:'Stable operation',description:'Routine synthetic load and weather variation.',load:[62,12],wind:[25,15],rain:[12,10]},
+  above:{number:'2',kicker:'ABOVE AVERAGE',title:'Limit time in this range',description:'Elevated stress. Equipment should not remain here for long.',load:[88,10],wind:[55,15],rain:[38,15]},
+  extreme:{number:'3',kicker:'EXTREME CONDITION',title:'Crew response required',description:'Harmful operating conditions. Review and mobilize a qualified crew.',load:[122,10],wind:[96,18],rain:[78,18]}
+};
 async function get(url){let r;try{r=await fetch(url,{signal:AbortSignal.timeout(70000)})}catch(e){throw Error('The demo backend is starting or unavailable. Wait a moment, then click Analyze scenario to retry.')}const isJSON=(r.headers.get('content-type')||'').includes('application/json');const d=isJSON?await r.json():{};if(!r.ok||!isJSON)throw Error(d.error||'The demo backend is waking up. Please retry shortly.');return d}
 const stat=(label,value,note)=>`<div class="stat"><span class="muted">${label}</span><strong>${value}</strong><span class="muted">${note}</span></div>`;
 function overview(){return `<div class="results-heading"><h2>Scenario results</h2><span>Ranked by risk and grid impact</span></div><div class="stats">${stat('Equipment requiring attention',state.summary.flagged_assets+'/12','24-hour synthetic failure risk')}${stat('Expected customer exposure',fmt(state.summary.expected_customer_exposure),'Risk-weighted scenario estimate')}${stat('Jobs awaiting a crew',state.summary.unassigned_jobs,'Capacity or skill gaps')}</div><div class="layout"><section class="panel"><div class="panel-head"><h2>Equipment risk map</h2><span class="muted">Fictional service territory</span></div><svg class="map" viewBox="0 0 820 430" role="img" aria-label="Schematic of twelve fictional grid assets"><defs><pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#dce9ec"/></pattern></defs><rect width="820" height="430" fill="url(#grid)"/><path d="M40 380 Q230 300 285 210 T780 35" fill="none" stroke="#cfe4e7" stroke-width="30"/><g stroke="#7facb3" stroke-width="2" fill="none"><path d="M120 95H675M145 220H700M120 345H675M120 95L145 220L120 345M305 95L330 220L305 345M490 95L515 220L490 345M675 95L700 220L675 345"/></g>${state.assets.map(a=>`<g><circle data-asset="${a.id}" tabindex="0" role="button" aria-label="${a.name}: ${pct(a.risk)} risk" cx="${a.x}" cy="${a.y}" r="${11+a.risk*13}" fill="${a.alert?'#d27d43':'#18a6a4'}"/><text x="${a.x}" y="${a.y+39}" text-anchor="middle" fill="#466b78" font-size="13">${a.name}</text></g>`).join('')}</svg><div class="legend">Orange: above model alert threshold (${pct(state.threshold)}) · Teal: below threshold</div></section><section class="panel"><h2>Your priority watchlist</h2><p class="muted">Risk × customer exposure, with critical-site weighting</p>${state.assets.slice(0,5).map(a=>`<button class="asset" data-asset="${a.id}"><b>${a.name}</b><span class="risk">${pct(a.risk)}</span><small>${a.id} · ${fmt(a.customers)} customers · ${a.critical_sites} critical sites</small></button>`).join('')}</section></div><section class="panel"><h2>Area exposure</h2><div class="crew-grid">${state.areas.map(a=>`<div><h3>${a.area}</h3><b>${fmt(a.expected_customer_exposure)}</b><span class="muted"> expected customer exposure</span><div class="bar"><span style="width:${100*a.expected_customer_exposure/Math.max(...state.areas.map(x=>x.expected_customer_exposure))}%"></span></div></div>`).join('')}</div></section>`}
@@ -17,16 +22,19 @@ function conditionNotice(){
   const riskiest=state.assets.reduce((best,a)=>a.risk>best.risk?a:best,state.assets[0]);
   const load=Number(state.load_pct);
   let level='';
-  if(load>=110||hottest>=90||riskiest.risk>=.8) level='critical';
+  if(currentMode==='extreme') level='emergency';
+  else if(currentMode==='above') level='warning';
+  else if(load>=110||hottest>=90||riskiest.risk>=.8) level='critical';
   else if(load>=95||hottest>=82||riskiest.risk>=.65) level='warning';
   if(!level){$('condition-alert').hidden=true;lastAlertKey='';dismissedAlertKey='';return}
   const key=`${level}:${riskiest.id}`;
-  const title=level==='critical'?'Critical transformer condition':'Transformer condition warning';
-  const message=`${riskiest.name} is at ${pct(riskiest.risk)} synthetic risk. Load ${Math.round(load)}%, highest temperature ${hottest.toFixed(1)}°C.`;
+  const title=level==='emergency'?'Immediate crew response advised':level==='critical'?'Critical transformer condition':'Elevated transformer stress';
+  const message=level==='emergency'?`${riskiest.name} is at ${pct(riskiest.risk)} synthetic risk. Send a qualified crew to review the proposed response immediately. No crew has been dispatched automatically.`:`${riskiest.name} is at ${pct(riskiest.risk)} synthetic risk. Load ${Math.round(load)}%, highest temperature ${hottest.toFixed(1)}°C.`;
   $('condition-alert').className=`condition-alert ${level}`;
-  $('alert-level').textContent=level==='critical'?'Critical condition':'Attention needed';
+  $('alert-level').textContent=level==='emergency'?'Extreme · crew action':level==='critical'?'Critical condition':'Above average · time limited';
   $('alert-title').textContent=title;
   $('alert-message').textContent=message;
+  $('alert-action').hidden=level!=='emergency';
   if(key!==dismissedAlertKey)$('condition-alert').hidden=false;
   if(key!==lastAlertKey&&'Notification' in window&&Notification.permission==='granted') new Notification(`GridWatch: ${title}`,{body:message,tag:'gridwatch-condition'});
   lastAlertKey=key;
@@ -40,9 +48,18 @@ function setLiveFeed(active){
 }
 function advanceSyntheticTelemetry(){
   telemetryPhase+=.22;
-  $('load').value=Math.round(82+30*Math.sin(telemetryPhase));
-  $('wind').value=Math.round(42+32*Math.sin(telemetryPhase*.73+1.1));
-  $('rain').value=Math.round(27+25*Math.sin(telemetryPhase*.51-1.4));
+  const mode=liveModes[currentMode];
+  $('load').value=Math.round(mode.load[0]+mode.load[1]*Math.sin(telemetryPhase));
+  $('wind').value=Math.round(mode.wind[0]+mode.wind[1]*Math.sin(telemetryPhase*.73+1.1));
+  $('rain').value=Math.round(mode.rain[0]+mode.rain[1]*Math.sin(telemetryPhase*.51-1.4));
+}
+function setMode(mode){
+  if(!liveModes[mode])return;
+  currentMode=mode;const config=liveModes[mode];
+  $('mode-dial').dataset.mode=mode;$('mode-number').textContent=config.number;
+  $('mode-kicker').textContent=config.kicker;$('mode-title').textContent=config.title;$('mode-description').textContent=config.description;
+  document.querySelectorAll('.mode-choice').forEach(button=>{const active=button.dataset.mode===mode;button.classList.toggle('active',active);button.setAttribute('aria-checked',String(active))});
+  dismissedAlertKey='';setLiveFeed(true);advanceSyntheticTelemetry();run('live');
 }
 async function enableBrowserAlerts(){
   if(!('Notification' in window)){$('alerts-toggle').textContent='In-app alerts on';return}
@@ -56,7 +73,6 @@ async function run(source='manual'){
   button.disabled=true;
   scenarioInputIds.forEach(id=>$(id).disabled=true);
   button.textContent='Analyzing…';
-  $('storm').disabled=true;
   $('scenario-status').textContent=metrics?'Running model…':'Connecting to backend…';
   $('error').textContent='';
   try{
@@ -75,16 +91,16 @@ async function run(source='manual'){
     button.disabled=false;
     scenarioInputIds.forEach(id=>$(id).disabled=false);
     button.textContent='Analyze scenario ↗';
-    $('storm').disabled=false;
     runInFlight=false;
   }
 }
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{view=b.dataset.view;document.querySelectorAll('[data-view]').forEach(x=>(x.classList.toggle('active',x===b),x.setAttribute('aria-current',x===b?'page':'false')));render()});
 $('run').onclick=()=>run('manual');
-$('storm').onclick=()=>{setLiveFeed(false);$('wind').value=105;$('rain').value=80;$('load').value=125;run('manual')};
 $('live-toggle').onclick=()=>{const active=$('live-toggle').getAttribute('aria-pressed')!=='true';setLiveFeed(active);if(active&&!runInFlight){advanceSyntheticTelemetry();run('live')}};
 $('alerts-toggle').onclick=enableBrowserAlerts;
 $('alert-close').onclick=()=>{dismissedAlertKey=lastAlertKey;$('condition-alert').hidden=true};
+$('alert-action').onclick=()=>{document.querySelector('[data-view="plan"]').click();$('condition-alert').hidden=true};
+document.querySelectorAll('.mode-choice').forEach(button=>button.onclick=()=>setMode(button.dataset.mode));
 $('close').onclick=()=>$('detail').close();
 run('live').finally(()=>setLiveFeed(true));
 
